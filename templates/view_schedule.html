@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if schedule_by_day %}
+        {% for date, sessions in schedule_by_day.items() %}
+            <h3>{{ date }}</h3>
+            {% for session in sessions %}
+                {{ session.task.title }} and {{ session.duration }}
+                <button type="submit" class="complete-btn" id="complete-btn-{{ session.id }}" data-session-id="{{ session.id }}">
+                    {% if session.completed %}
+                        <p>Done</p>
+                    {% else %}
+                        <p>Mark Complete</p>
+                    {% endif %}
+                </button>
+            {% endfor %}
+        {% endfor %}
+    {% else %}
+        <p>No schedule generated yet.</p>
+    {% endif %}
+    {% if summary %}
+        <div class="ai-summary">
+            <h3>Your Study Plan Summary</h3>
+            <p>{{ summary }}</p>
+        </div>
+    {% endif %}
+    <script>
+        const buttons = document.querySelectorAll(".complete-btn")
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                const sessionId = button.dataset.sessionId;
+                fetch(`/schedule/session/${sessionId}/complete`, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.completed) {
+                        button.textContent = "Completed";
+                    } else {
+                        button.textContent = "Mark Complete"
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form id="task-form" method="post" action="{{ url_for('tasks.add_tasks', subject_id=subject.id) }}">
+        <label>Title: <input id="title" type="text" name="title"></label>
+        <div id="title-error" class="error"></div>
+        <label>Estimated Hours: <input id="estimated_hours" type="number" step="0.5" name="estimated_hours"></label>
+        <div id="estimated_hours-error" class="error"></div>
+        <label>Priority: 
+            <select id="priority" name="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
+        </label>
+        <div id="priority-error" class="error"></div>
+        <label>Due Date: <input id="due_date" type="date" name="due_date"></label>
+        <div id="due_date-error" class="error"></div>
+        <label>Status: 
+            <select id="status" name="status">
+                <option value="pending">Pending</option>
+                <option value="in_progress">In Progress</option>
+                <option value="Done">Done</option>
+            </select>
+        </label>
+        <div id="status-error" class="error"></div>
+        <button type="submit" name="submit">Submit</button>
+    </form>
+    <script>
+        const form = document.getElementById("task-form");
+        console.log("form found:", form);
+
+        form.addEventListener("submit", function(event) {
+            console.log("submit triggered");
+            const title = document.getElementById("title");
+            const estimated_hours = document.getElementById("estimated_hours");
+            const priority = document.getElementById("priority");
+            const due_date = document.getElementById("due_date");
+            const status = document.getElementById("status");
+            let isValid = true;
+
+            document.getElementById("title-error").textContent = "";
+            document.getElementById("estimated_hours-error").textContent = "";
+            document.getElementById("priority-error").textContent = "";
+            document.getElementById("due_date-error").textContent = "";
+            document.getElementById("status-error").textContent = "";
+
+            if (!title.value.trim()) {
+                document.getElementById("title-error").textContent = "Title is required.";
+                isValid = false;
+            }
+
+            if (estimated_hours.value === "" || Number(estimated_hours.value) <= 0) {
+                document.getElementById("estimated_hours-error").textContent = "Hours cannot be negative.";
+                isValid = false;
+            }
+
+            if (priority.value === "") {
+                document.getElementById("priority-error").textContent = "Select a valid priority level.";
+                isValid = false;
+            }
+
+            if (!due_date.value) {
+                document.getElementById("due_date-error").textContent = "Enter valid date.";
+                isValid = false;
+            }
+
+            if (status.value === "") {
+                document.getElementById("status-error").textContent = "Enter the current status.";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}

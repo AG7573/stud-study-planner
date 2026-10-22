@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form id="add-subject-form" method="post" action="{{ url_for('subjects.add_subject') }}">
+        <label>Name: <input id="name" type="text" name="name"></label>
+        <div id="name-error" class="error"></div>
+        <label>Exam Date: <input id="exam_date" type="date" name="exam_date"></label>
+        <div id="exam_date-error" class="error"></div>
+        <button type="submit" name="submit">Submit</button>
+    </form> 
+    <a href="{{ url_for('subjects.list_subjects')}}">Back to list</a>
+    <script>
+        const form = document.getElementById("add-subject-form");
+
+        form.addEventListener("submit", function(event) {
+            const name = document.getElementById("name");
+            const exam_date = document.getElementById("exam_date");
+            let isValid = true;
+
+            document.getElementById("name-error").textContent = "";
+            document.getElementById("exam_date-error").textContent = "";
+
+            if (!name.value.trim()) {
+                document.getElementById("name-error").textContent = "Enter a valid subject name.";
+                isValid = false;
+            }
+
+            if (!exam_date.value) {
+                document.getElementById("exam_date-error").textContent = "Enter a valid exam date";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for task in tasks %}
+    <div class="task-card" id="task-{{ task.id }}">
+        <label>{{ task.title }}, {{ task.estimated_hours }}, {{ task.priority }}, {{ task.due_date }}, {{ task.status }}</label>
+        <a href="{{ url_for('tasks.edit_tasks', task_id=task.id) }}">Edit</a>
+        <button type="button" class="delete-btn" data-task-id="{{ task.id }}">
+            Delete
+        </button>
+    </div>
+    {% else %}
+        <p>You don't have any tasks yet. Add one to get started!</p>
+    {% endfor %}
+    <a href="{{ url_for('tasks.add_tasks', subject_id=subject.id) }}">Add Task</a>
+
+    <script>
+        const buttons = document.querySelectorAll(".delete-btn");
+
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                const taskId = button.dataset.taskId;
+                fetch(`/tasks/${taskId}/delete`, {
+                    method: "POST"
+                })
+                .then(async response => {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error(`Server returned ${response.status} = ${errorText}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.delete) {
+                        button.closest(".task-card").remove();
+                    } else {
+                        alert(data.message || "Failed to delete task.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error: ", error);
+                });
+            });
+        });
+    </script>
+{% endblock %}

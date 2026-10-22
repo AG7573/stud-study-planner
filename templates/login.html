@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form method="post" action="{{url_for('auth.login')}}">
+    <label>Email: <input type="email" name="email"></label>
+    <label>Password: <input type="password" name="password"></label>
+    <button type="submit" name="submit">Submit</button>
+</form>
+<a href="{{url_for('auth.signup')}}">Signup</a>
+{% endblock %}

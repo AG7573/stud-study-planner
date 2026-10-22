@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+        {% for subject in subjects %}
+            <a href="{{ url_for('subjects.edit_subject', subject_id=subject.id) }}">Edit</a>
+            <div class="subject-card" id="subject-{{ subject.id }}">
+                <h3>{{ subject.name }}</h3>
+                <p>{{ subject.exam_date }}</p>
+                <div class="delete">
+                    <button type="button" class="delete-btn" data-subject-id="{{ subject.id }}">
+                        Delete
+                    </button>
+                </div>
+            </div>
+            <a href="{{ url_for('tasks.list_tasks', subject_id=subject.id)}}">View Tasks</a>
+            <a href="{{ url_for('schedule.fetch_user_studysession_rows')}}">View Schedule</a>
+        {% else %}
+            <p>You don't have any subjects yet. Add one to get started!</p>
+        {% endfor %}
+        {% if subjects %}
+            <p>Number of subjects: {{ subjects|length }}</p>
+        {% endif %}
+        <a href="{{ url_for('subjects.add_subject')}}">Add</a>
+    <form method="post" action="{{ url_for('schedule.fetch_user_tasks') }}">
+        <button type="submit">Generate Schedule</button>
+    </form>
+    <script>
+        const buttons = document.querySelectorAll(".delete-btn");
+        
+        buttons.forEach(button => {
+            button.addEventListener("click", function() {
+                const subjectId = button.dataset.subjectId;
+                fetch(`/subjects/${subjectId}/delete`, {
+                    method: "POST"
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.delete) {
+                        button.closest(".subject-card").remove();
+                    } else {
+                        alert(data.message || "Failed to delete subject.");
+                    }
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                });
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,808 @@
+/* =========================================================
+   Stud — study planner styles
+   Works with plain element markup; optional classes are
+   listed near the bottom (.card, .badge, .empty-state ...)
+   ========================================================= */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #f6f3ee;
+  --surface: #ffffff;
+  --text: #1b1e2b;
+  --muted: #6b7080;
+  --border: #e4dfd6;
+
+  --brand: #1d2340;
+  --accent: #ff6b4a;
+  --accent-hover: #f0522f;
+  --accent-soft: #ffe8e2;
+  --link: #c7401f;
+
+  --success: #1f9d6b;
+  --success-soft: #dff5ea;
+  --warn: #c17d00;
+  --warn-soft: #fff1cf;
+  --danger: #d6384a;
+  --danger-soft: #fde4e7;
+
+  --radius: 14px;
+  --radius-sm: 9px;
+  --shadow: 0 1px 2px rgba(27, 30, 43, 0.06), 0 8px 24px rgba(27, 30, 43, 0.07);
+  --shadow-hover: 0 2px 4px rgba(27, 30, 43, 0.08), 0 14px 32px rgba(27, 30, 43, 0.12);
+
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #12141c;
+    --surface: #1b1e2b;
+    --text: #eceef5;
+    --muted: #9a9fb2;
+    --border: #2b2f40;
+
+    --brand: #0c0e15;
+    --accent-soft: #3a2420;
+    --link: #ff8a6e;
+
+    --success-soft: #14352a;
+    --warn-soft: #3a2f12;
+    --danger-soft: #3a1a20;
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.35);
+    --shadow-hover: 0 2px 4px rgba(0, 0, 0, 0.5), 0 14px 32px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* ---------- Base ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text);
+  background: var(--bg);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 1.6rem 0 0.6rem;
+}
+
+h1 {
+  font-size: clamp(1.8rem, 4vw, 2.4rem);
+  font-weight: 800;
+  margin-top: 0.2rem;
+}
+
+h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-top: 0;
+}
+
+p {
+  margin: 0.4rem 0 0.9rem;
+}
+
+a {
+  color: var(--link);
+  font-weight: 600;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- Navbar ---------- */
+
+.site-nav {
+  background: var(--brand);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.nav-inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+}
+
+.brand {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--accent);
+}
+
+.brand:hover {
+  color: #fff;
+}
+
+.nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.nav-links a {
+  display: block;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  color: #d9dcec;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.nav-links a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.nav-links a.nav-cta {
+  background: var(--accent);
+  color: #fff;
+}
+
+.nav-links a.nav-cta:hover {
+  background: var(--accent-hover);
+}
+
+/* ---------- Page container & footer ---------- */
+
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+}
+
+.site-footer {
+  padding: 1.5rem 1rem 2rem;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ---------- Flash messages ---------- */
+
+.flash-wrap {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
+}
+
+.flash {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-weight: 500;
+  background: var(--accent-soft);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-sm);
+}
+
+.flash-success {
+  background: var(--success-soft);
+  border-left-color: var(--success);
+}
+
+.flash-error,
+.flash-danger {
+  background: var(--danger-soft);
+  border-left-color: var(--danger);
+}
+
+.flash-warning {
+  background: var(--warn-soft);
+  border-left-color: var(--warn);
+}
+
+/* ---------- Forms ---------- */
+
+label {
+  display: block;
+  margin-bottom: 0.9rem;
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+input,
+select,
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  font-weight: 400;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(255, 107, 74, 0.18);
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  display: inline-block;
+  width: auto;
+  margin: 0 0.5rem 0 0;
+  accent-color: var(--accent);
+}
+
+/* Data-entry forms (anything with a real input/select) become a card.
+   Tiny forms that only hold a button (e.g. Delete) are left alone. */
+.form-card,
+form:has(input:not([type="hidden"]):not([type="checkbox"])),
+form:has(select) {
+  max-width: 560px;
+  margin: 1rem auto;
+  padding: 1.6rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+form:has(input:not([type="hidden"]):not([type="checkbox"])) button[type="submit"],
+form:has(select) button[type="submit"] {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.85rem;
+}
+
+/* Validation messages written by the JS */
+.error {
+  margin: -0.5rem 0 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--danger);
+}
+
+.error:empty {
+  display: none;
+}
+
+/* ---------- Buttons ---------- */
+
+button,
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.15rem;
+  font: inherit;
+  font-weight: 700;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 999px;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.12);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.1s, background 0.15s, box-shadow 0.15s;
+}
+
+button:hover,
+.btn:hover {
+  background: var(--accent-hover);
+  color: #fff;
+}
+
+button:active,
+.btn:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+
+.btn-secondary {
+  color: var(--text);
+  background: transparent;
+  border: 1.5px solid var(--border);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  color: var(--link);
+  background: transparent;
+  border-color: var(--accent);
+}
+
+/* Delete buttons: any .delete-btn / .btn-danger, or any button inside a
+   form whose action URL contains "delete" */
+.btn-danger,
+.delete-btn,
+form[action*="delete"] button {
+  color: var(--danger);
+  background: transparent;
+  border: 1.5px solid var(--danger);
+  box-shadow: none;
+}
+
+.btn-danger:hover,
+.delete-btn:hover,
+form[action*="delete"] button:hover {
+  color: #fff;
+  background: var(--danger);
+}
+
+/* ---------- Cards ---------- */
+
+.card,
+.task-card {
+  margin-bottom: 0.9rem;
+  padding: 1.1rem 1.3rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.card:hover,
+.task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.task-card {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.9rem;
+}
+
+.task-card label {
+  flex: 1 1 240px;
+  margin: 0;
+  font-size: 1rem;
+}
+
+.task-card a {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.task-card a:hover {
+  color: var(--link);
+  border-color: var(--accent);
+}
+
+.task-card .delete-btn {
+  padding: 0.4rem 0.9rem;
+  font-size: 0.9rem;
+}
+
+/* Optional: add class="done" to a finished task/session card */
+.task-card.done label,
+.card.done h3 {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+/* ---------- Badges (optional hooks) ---------- */
+
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.7rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--link);
+  background: var(--accent-soft);
+  border-radius: 999px;
+}
+
+.badge-high {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+
+.badge-medium {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.badge-low,
+.badge-done {
+  color: var(--success);
+  background: var(--success-soft);
+}
+
+.badge-pending {
+  color: var(--muted);
+  background: var(--border);
+}
+
+.badge-in_progress {
+  color: var(--warn);
+  background: var(--warn-soft);
+}
+
+/* ---------- AI summary ---------- */
+
+.ai-summary {
+  margin: 1.25rem 0;
+  padding: 1.1rem 1.4rem;
+  background: linear-gradient(135deg, var(--accent-soft), var(--surface) 70%);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.ai-summary h3 {
+  margin-bottom: 0.4rem;
+}
+
+.ai-summary h3::before {
+  content: "\2726  ";
+  color: var(--accent);
+}
+
+.ai-summary p {
+  margin-bottom: 0;
+}
+
+/* ---------- Empty states & error pages ---------- */
+
+.empty-state {
+  padding: 2.5rem 1rem;
+  text-align: center;
+  color: var(--muted);
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+}
+
+.error-page {
+  padding: 3rem 0;
+  text-align: center;
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Tables (schedule view, if it uses one) ---------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+th,
+td {
+  padding: 0.7rem 0.9rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Login / Signup ----------
+   Any page containing a password field is treated as an auth page, so
+   login.html and signup.html pick this up with no markup changes. */
+
+body:has(input[type="password"]) {
+  background:
+    radial-gradient(circle at 12% 0%, var(--accent-soft), transparent 42%),
+    radial-gradient(circle at 92% 100%, rgba(29, 35, 64, 0.14), transparent 48%),
+    var(--bg);
+}
+
+.container:has(input[type="password"]) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.container:has(input[type="password"]) .flash-wrap {
+  width: 100%;
+  max-width: 420px;
+}
+
+.container:has(input[type="password"]) form {
+  width: 100%;
+  max-width: 420px;
+  margin: 0;
+  padding: 2.2rem 2rem 1.8rem;
+  border-top: 5px solid var(--accent);
+  animation: auth-rise 0.45s ease-out both;
+}
+
+.container:has(input[type="password"]) form label {
+  margin-bottom: 1.1rem;
+}
+
+.container:has(input[type="password"]) form button[type="submit"] {
+  margin-top: 0.75rem;
+  padding: 0.9rem;
+  font-size: 1rem;
+}
+
+/* The "Login" / "Sign up" link under the card */
+.container:has(input[type="password"]) > a {
+  margin-top: 1.25rem;
+  padding: 0.5rem 1.1rem;
+  font-size: 0.95rem;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+  background: var(--surface);
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.container:has(input[type="password"]) > a:hover {
+  color: var(--link);
+  border-color: var(--accent);
+}
+
+/* Optional hooks if you add a heading above the form:
+   <h1 class="auth-title">Welcome back</h1>
+   <p class="auth-sub">Log in to see your study plan.</p> */
+.auth-title {
+  margin: 0 0 0.3rem;
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.auth-sub {
+  margin: 0 0 1.5rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+@keyframes auth-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .container:has(input[type="password"]) form {
+    animation: none;
+  }
+}
+
+/* ---------- Spacing & page rhythm ----------
+   Gives plain, unwrapped markup room to breathe, and adds the
+   card layout classes used by the subjects list. */
+
+.container {
+  padding-top: 2.75rem;
+  padding-bottom: 4.5rem;
+}
+
+.container > h1 {
+  margin-bottom: 0.5rem;
+}
+
+.meta {
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+  color: var(--muted);
+}
+
+/* Links dropped straight into the page become tidy pill buttons */
+.container > a {
+  display: inline-flex;
+  align-items: center;
+  margin: 0.5rem 0.6rem 0.5rem 0;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s, transform 0.1s;
+}
+
+.container > a:hover {
+  color: var(--link);
+  border-color: var(--accent);
+}
+
+.container > button,
+.container > form {
+  margin-top: 1.25rem;
+}
+
+/* ---------- Subject cards ---------- */
+
+.subject-card {
+  margin-bottom: 1.5rem;
+  padding: 1.6rem 1.75rem;
+}
+
+.card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.card-head h3 {
+  margin: 0 0 0.45rem;
+  font-size: 1.35rem;
+}
+
+.card-head > a {
+  padding: 0.3rem 0.9rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.card-head > a:hover {
+  color: var(--link);
+  border-color: var(--accent);
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.card-actions a {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.92rem;
+  color: var(--text);
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.card-actions a:hover {
+  color: var(--link);
+  border-color: var(--accent);
+}
+
+.card-actions a.primary {
+  color: #fff;
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.card-actions a.primary:hover {
+  color: #fff;
+  background: var(--accent-hover);
+}
+
+/* Push Delete to the far right of the action row */
+.card-actions .delete-btn,
+.card-actions form {
+  margin: 0 0 0 auto;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+}
+
+.card-actions .delete-btn {
+  padding: 0.5rem 1.1rem;
+  font-size: 0.92rem;
+  border: 1.5px solid var(--danger);
+}
+
+/* ---------- Small screens ---------- */
+
+@media (max-width: 600px) {
+  .container {
+    padding: 1.25rem 1rem 2.5rem;
+  }
+
+  .nav-inner {
+    justify-content: center;
+  }
+
+  .form-card,
+  form:has(input:not([type="hidden"]):not([type="checkbox"])),
+  form:has(select) {
+    padding: 1.2rem;
+  }
+
+  table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
