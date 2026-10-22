@@ -8,7 +8,7 @@ Features
 - Displays subject list, task list.
 - Allows editing of tasks and subjects.
 - Responsive design for desktop and mobile devices.
-- Data of the user is secure.
+- Passwords are hashed, and every route checks that the data belongs to the logged-in user.
 
 Tech Stack
 
